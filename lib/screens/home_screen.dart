@@ -66,7 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     getTrendingWallpaper();
     categories = getCategories();
-
   }
 
   @override
@@ -127,119 +126,119 @@ class _HomeScreenState extends State<HomeScreen> {
               valueColor: AlwaysStoppedAnimation(Colors.blue),
             ))
           : Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 20, left: 26, right: 26),
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                decoration: BoxDecoration(
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 15,
-                        spreadRadius: 2.0)
-                  ],
-                  color: const Color(0xfff5f8fd),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: searchQuery,
-                        decoration: const InputDecoration(
-                          hintText: 'Search Wallpaper',
-                          border: InputBorder.none,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 26, right: 26),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  decoration: BoxDecoration(
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey, blurRadius: 15, spreadRadius: 2.0)
+                    ],
+                    color: const Color(0xfff5f8fd),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: searchQuery,
+                          decoration: const InputDecoration(
+                            hintText: 'Search Wallpaper',
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                    InkWell(
+                      InkWell(
+                          onTap: () {
+                            String query = searchQuery.text.toString();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchScreen(
+                                          searchQuery: query,
+                                        )));
+                            searchQuery.clear();
+                          },
+                          child: const Icon(Icons.search)),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  height: 80,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      return CategoriesListTile(
+                        title: categories[index].categoriesName,
+                        imgUrl: categories[index].imgUrl,
                         onTap: () {
-                          String query = searchQuery.text.toString();
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SearchScreen(
-                                        searchQuery: query,
+                                        searchQuery:
+                                            categories[index].categoriesName,
                                       )));
-                          searchQuery.clear();
                         },
-                        child: const Icon(Icons.search)),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                height: 80,
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) {
-                    return CategoriesListTile(
-                      title: categories[index].categoriesName,
-                      imgUrl: categories[index].imgUrl,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchScreen(
-                                      searchQuery:
-                                          categories[index].categoriesName,
-                                    )));
-                      },
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 8.0,
-                    crossAxisSpacing: 8.0,
-                    childAspectRatio: 0.6,
+                      );
+                    },
                   ),
-                  itemCount: wallpapers.length,
-                  itemBuilder: (context, index) {
-                      int wallpaperIndex = index - (index ~/ 6); // Adjust index for wallpapers
-                      return GridTile(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DownloadWallpaper(
-                                      imgUrl: wallpapers[wallpaperIndex].src!.portrait!,
-                                    )));
-                          },
-                          child: Hero(
-                            tag: wallpapers[wallpaperIndex].src!.portrait!,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black26,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                  wallpapers[wallpaperIndex].src!.portrait!,
-                                  fit: BoxFit.cover,
+                ),
+                Expanded(
+                  child: GridView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                        childAspectRatio: 0.6,
+                      ),
+                      itemCount: wallpapers.length,
+                      itemBuilder: (context, index) {
+                        int wallpaperIndex =
+                            index - (index ~/ 6); // Adjust index for wallpapers
+                        return GridTile(
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DownloadWallpaper(
+                                            imgUrl: wallpapers[wallpaperIndex]
+                                                .src!
+                                                .portrait!,
+                                          )));
+                            },
+                            child: Hero(
+                              tag: wallpapers[wallpaperIndex].src!.portrait!,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black26,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    wallpapers[wallpaperIndex].src!.portrait!,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    }
+                        );
+                      }),
                 ),
-              ),
-
-            ],
-          ),
+              ],
+            ),
     );
   }
 }
