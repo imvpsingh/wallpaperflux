@@ -24,7 +24,17 @@ class _DownloadWallpaperState extends State<DownloadWallpaper> {
       appBar: AppBar(
         title: const CustomText(
           text: "Download Wallpaper",
-          fontSize: 22,
+          fontSize: 20,
+          shadow: [Shadow(color: Colors.white54)],
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () {
+            Navigator.pop(context); // Navigates back when the back button is pressed
+          },
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.black87, // Sets the color of icons, including the back icon
         ),
         elevation: 4.0,
         bottomOpacity: 5.0,

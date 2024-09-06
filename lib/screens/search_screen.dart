@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:wallpaperflux/widgets/custom_text.dart';
+import '../admobHelper/admobHelper.dart';
 import '../data/data.dart';
 import '../model/wallpaper_model.dart';
 import 'download_screen.dart';
@@ -23,6 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     getSearchedWallpapers();
+    AdmobHelper.initialization();
 
   }
 
@@ -75,47 +78,62 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.blue),))
-          : GridView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 12 , vertical: 10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 8.0,
-                childAspectRatio: 0.6,
-              ),
-              itemCount: wallpapers.length,
-              itemBuilder: (context, index) {
-                return GridTile(
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DownloadWallpaper(imgUrl:  wallpapers[index].src!.portrait!,
-                                  ),
-                          ));
-                    },
-                    child: Hero(
-                      tag:  wallpapers[index].src!.portrait!,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black26,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.network(
-                            wallpapers[index].src!.portrait!,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+          : Column(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  child: GridView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 12 , vertical: 10),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 8.0,
+                        crossAxisSpacing: 8.0,
+                        childAspectRatio: 0.6,
                       ),
+                      itemCount: wallpapers.length,
+                      itemBuilder: (context, index) {
+                        return GridTile(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DownloadWallpaper(imgUrl:  wallpapers[index].src!.portrait!,
+                                          ),
+                                  ));
+                            },
+                            child: Hero(
+                              tag:  wallpapers[index].src!.portrait!,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black26,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    wallpapers[index].src!.portrait!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
-            ),
+                ),
+              ),
+              SizedBox(
+                height: 80,
+                // color: Colors.grey,
+                child: AdWidget(ad: AdmobHelper.createBannerAd()..load()), // Load the banner ad
+              )
+            ],
+          ),
     );
   }
 }

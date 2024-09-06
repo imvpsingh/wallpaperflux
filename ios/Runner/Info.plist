@@ -31,6 +31,8 @@
         <key>kTCCServiceMediaLibrary</key>
             <string>media</string>
 	<key>UIMainStoryboardFile</key>
+	<key>GADApplicationIdentifier</key>
+    <string>ca-app-pub-1879214842254649~9167879434</string>
 	<string>Main</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

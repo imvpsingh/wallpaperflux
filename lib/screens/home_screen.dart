@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wallpaperflux/screens/about_us.dart';
 import 'package:wallpaperflux/screens/download_screen.dart';
 import 'package:wallpaperflux/screens/privacy_policy.dart';
@@ -7,6 +8,7 @@ import 'package:wallpaperflux/screens/search_screen.dart';
 import 'package:wallpaperflux/widgets/custom_text.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../admobHelper/admobHelper.dart';
 import '../data/data.dart';
 import '../model/categories_model.dart';
 import '../model/wallpaper_model.dart';
@@ -61,8 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
     getTrendingWallpaper();
     categories = getCategories();
+
   }
 
   @override
@@ -193,8 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: GridView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 8.0,
                     crossAxisSpacing: 8.0,
@@ -202,39 +205,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   itemCount: wallpapers.length,
                   itemBuilder: (context, index) {
-                    return GridTile(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DownloadWallpaper(
-                                        imgUrl: wallpapers[index]
-                                            .src!
-                                            .portrait!,
-                                      )));
-                        },
-                        child: Hero(
-                          tag: wallpapers[index].src!.portrait!,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black26,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Image.network(
-                                wallpapers[index].src!.portrait!,
-                                fit: BoxFit.cover,
+                      int wallpaperIndex = index - (index ~/ 6); // Adjust index for wallpapers
+                      return GridTile(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DownloadWallpaper(
+                                      imgUrl: wallpapers[wallpaperIndex].src!.portrait!,
+                                    )));
+                          },
+                          child: Hero(
+                            tag: wallpapers[wallpaperIndex].src!.portrait!,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black26,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Image.network(
+                                  wallpapers[wallpaperIndex].src!.portrait!,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    }
                 ),
               ),
+
             ],
           ),
     );
